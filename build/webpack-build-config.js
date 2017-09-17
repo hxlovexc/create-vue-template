@@ -7,28 +7,53 @@
 */
 const webpack = require('webpack');
 const merge = require('webpack-merge');
+const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const baseConfig = require('./webpack-base-config');
 const config = require('../config');
 const utils = require('./utils');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const buildConfig = {
+  output: {
+    filename: utils.assetsPath('js/[name].[chunkhash].js'),
+    chunkFilename: utils.assetsPath('js/[name].[chunkhash].js')
+  },
+  devtool: config.build.sourceType,
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
     }),
-    new webpack.optimize.ModuleConcatenationPlugin(),
-    new HtmlWebpackPlugin({
-      filename: config.view.slice(config.view.lastIndexOf('/') + 1, config.view.length),
-      template: utils.resolve(config.view),
-      inject: true,
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeAttributeQuotes: true
-      },
-    })
+    new webpack.optimize.ModuleConcatenationPlugin()
   ]
 };
+
+config.build.extraction && buildConfig.plugins.push(
+  new ExtractTextPlugin({
+    filename: utils.assetsPath('css/[name].[contenthash].css')
+  })
+);
+
+// CommonsChunkPlugin
+config.dll.list.length && buildConfig.plugins.push(
+  // 将依赖的公用模块打包
+  new webpack.optimize.CommonsChunkPlugin({
+    name: 'vendor',
+    minChunks: function (module, count) {
+      return (
+        module.resource &&
+        /\.js$/.test(module.resource) &&
+        module.resource.indexOf(
+          path.join(__dirname, '../node_modules')
+        ) === 0
+      );
+    }
+  }),
+  new webpack.optimize.CommonsChunkPlugin({
+    name: 'manifest',
+    chunks: ['vendor']
+  }),
+  new webpack.HashedModuleIdsPlugin()
+);
 
 module.exports = merge(baseConfig, buildConfig);

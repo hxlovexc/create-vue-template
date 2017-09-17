@@ -5,6 +5,8 @@
  * @modify date 2017-09-13 06:52:24
  * @desc [dev入口]
 */
+
+process.env.mode = 'dev';
 const webpack = require('webpack');
 const express = require('express');
 const path = require('path');
