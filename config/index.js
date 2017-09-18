@@ -27,7 +27,7 @@ module.exports = {
     producedDll: []
   },
   dev: {
-    port: 3030,
+    port: 8080,
     publicPath: '/',
     autoOpenBrowser: true,
     sourceType: '#cheap-module-eval-source-map',

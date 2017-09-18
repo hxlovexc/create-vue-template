@@ -7,12 +7,10 @@
 */
 const webpack = require('webpack');
 const notifier = require('node-notifier');
-const path = require('path');
 const merge = require('webpack-merge');
 const fs = require('fs');
 const config = require('../config/');
 const utils = require('./utils');
-const libPath = config.dll.outputPath;
 const mode = process.env.mode === 'build';
 const manifestName = config.dll.manifestName;
 // lib路径
@@ -34,7 +32,7 @@ let webpackConfig = {
   output: {
     path: utils.resolve(outputPath),
     filename: '[name].[chunkhash:7].js',
-    library: "[name]"
+    library: '[name]'
   },
   devtool: config.dev.sourceType,
   module: {
@@ -78,7 +76,7 @@ webpackConfig.entry.lib.map((item) => {
   return item.indexOf('.') === 0 ? utils.resolve(item) : item;
 });
 
-//打包公用库
+// 打包公用库
 webpack(webpackConfig, (error, stats) => {
   if (error) dllError('编译失败');
   setName(Object.keys(stats.compilation.assets)[0])
@@ -107,7 +105,7 @@ function dllError (msg) {
 
 function setName (name) {
   fs.readFile(manifestPath, 'utf8', (err, data) => {
-    if(err) console.log(err);
+    if (err) console.log(err);
     data = JSON.parse(data);
     data.fileName = name;
     fs.writeFileSync(

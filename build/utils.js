@@ -18,12 +18,12 @@ let utils = {
     return dir.indexOf(base) === 0 ? path.resolve(__dirname, dir) : path.resolve(__dirname, base, dir);
   },
   isBuild: process.env.mode === 'build',
-  //获取内网ip
+  // 获取内网ip
   getLocalIp () {
     let ip = [];
     let ifaces = os.networkInterfaces();
     for (var dev in ifaces) {
-      if(ifaces[dev][1].address.indexOf('192.168') != -1) {
+      if (ifaces[dev][1].address.indexOf('192.168') !== -1) {
         return ifaces[dev][1].address;
       }
     }
@@ -83,7 +83,7 @@ let utils = {
   },
   assetsPath (filePath) {
     let rootDir = config[process.env.mode].assetsDir;
-    return path.join(rootDir, filePath)
+    return path.join(rootDir, filePath);
   },
   // 获取文件
   getFiles (_path) {

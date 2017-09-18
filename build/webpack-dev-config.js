@@ -10,7 +10,6 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const baseConfig = require('./webpack-base-config');
 const config = require('../config/');
-const utils = require('./utils');
 
 const buildConfig = {
   devtool: config.dev.sourceType,

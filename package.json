@@ -1,27 +1,23 @@
 {
-  "name": "xui-cli",
-  "version": "0.0.1",
-  "description": "vue项目脚手架",
+  "name": "<%= name %>",
+  "version": "1.0.0",
+  "description": "<%= description %>",
   "main": "index.js",
-  "scripts": {
-    "dev": "node build/dev-server",
-    "build": "node build/build",
+  "scripts": {<% if(extractingType === 'dll'){ %>
+    "dev": "npm run dll-dev && node build/dev-server",
+    "build": "npm run dll-build && node build/build",
     "dll-dev": "cross-env mode=dev node build/webpack-dll-config",
     "dll-build": "cross-env mode=build node build/webpack-dll-config"
+    <% }else{ %>
+    "dev": "node build/dev-server",
+    "build": "node build/build"<% } %>
   },
-  "keywords": [
-    "vue",
-    "vue脚手架",
-    "vue多页脚手架",
-    "vue单页脚手架"
-  ],
-  "author": "小缘",
+  "author": "<%= author %>",
   "license": "ISC",
   "devDependencies": {
     "add-asset-html-webpack-plugin": "^2.1.2",
     "autoprefixer": "^7.1.4",
-    "babel-core": "^6.26.0",
-    "babel-eslint": "^8.0.0",
+    "babel-core": "^6.26.0",<% if(eslint){ %>"babel-eslint": "^8.0.0",<% } %>
     "babel-helper-vue-jsx-merge-props": "^2.0.2",
     "babel-loader": "^7.1.2",
     "babel-plugin-syntax-jsx": "^6.18.0",
@@ -33,7 +29,7 @@
     "clean-webpack-plugin": "^0.1.16",
     "connect-history-api-fallback": "^1.3.0",
     "cross-env": "^5.0.5",
-    "css-loader": "^0.28.7",
+    "css-loader": "^0.28.7",<% if(eslint){ %>
     "eslint": "^4.7.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-friendly-formatter": "^3.0.0",
@@ -41,7 +37,7 @@
     "eslint-plugin-html": "^3.2.2",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.1",
+    "eslint-plugin-standard": "^3.0.1",<% } %>
     "eventsource-polyfill": "^0.9.6",
     "express": "^4.15.4",
     "extract-text-webpack-plugin": "^3.0.0",
@@ -62,10 +58,10 @@
     "progress-bar-webpack-plugin": "^1.10.0",
     "rimraf": "^2.6.2",
     "sass-loader": "^6.0.6",
-    "style-loader": "^0.18.2",
+    "style-loader": "^0.18.2",<% if(stylelint){ %>
     "stylelint": "^8.1.1",
     "stylelint-config-standard": "^17.0.0",
-    "stylelint-webpack-plugin": "^0.9.0",
+    "stylelint-webpack-plugin": "^0.9.0",<% } %>
     "stylus-loader": "^3.0.1",
     "url-loader": "^0.5.9",
     "vue-loader": "^13.0.4",
@@ -77,11 +73,8 @@
     "webpack-merge": "^4.1.0"
   },
   "dependencies": {
-    "eslint-plugin-node": "^5.1.1",
     "vue": "^2.4.3",
-    "vue-router": "^2.7.0",
-    "vue-xui": "^0.6.1",
-    "vuex": "^2.4.0"
+    <% if(router){ %>"vue-router": "^2.7.0"<% } %>
   },
   "browserslist": [
     "> 1%",

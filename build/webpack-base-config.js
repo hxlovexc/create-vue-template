@@ -10,12 +10,10 @@ const config = require('../config/');
 const utils = require('./utils');
 const resolve = require('./webpack-common-resolve');
 const webpack = require('webpack');
-const webpackProgress = require('progress-bar-webpack-plugin');
 const ProgressBar = require('progress-bar-webpack-plugin');
 const NotifierPlugin = require('friendly-errors-webpack-plugin');
 const notifier = require('node-notifier');
 const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
-const path = require('path');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 
 // 生产环境才可以配置是否抽取css
@@ -111,9 +109,10 @@ let webpackCconfig = {
 
 // 判断是否dll
 if (config.dll.list.length) {
-  const dir = utils.resolve(`../src/${config[process.env.mode].assetsDir}/${config.dll.manifestName}`);
+  let dir = utils.resolve(`../src/${config[process.env.mode].assetsDir}/${config.dll.manifestName}`).replace(/\\/g, '\/');
   const libDir = dir.slice(0, dir.lastIndexOf('/') + 1);
   const outputPath = dir.slice(dir.indexOf(`/${config[process.env.mode].assetsDir}/`), dir.lastIndexOf('/'));
+
   webpackCconfig.plugins = webpackCconfig.plugins.concat([
     new webpack.DllReferencePlugin({
       context: __dirname,

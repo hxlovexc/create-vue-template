@@ -8,7 +8,6 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const baseConfig = require('./webpack-base-config');
 const config = require('../config');
 const utils = require('./utils');
