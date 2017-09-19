@@ -4,35 +4,43 @@
  * @create date 2017-09-13 05:59:02
  * @modify date 2017-09-13 05:59:02
  * @desc [项目公用基础配置]
-*/
-
+*/<% if(extractingType === 'dll'){ %>
+const webpack = require('webpack');
+<% } %>
 const config = require('../config/');
 const utils = require('./utils');
-const resolve = require('./webpack-common-resolve');
-const webpack = require('webpack');
 const ProgressBar = require('progress-bar-webpack-plugin');
 const NotifierPlugin = require('friendly-errors-webpack-plugin');
-const notifier = require('node-notifier');
-const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
-const StyleLintPlugin = require('stylelint-webpack-plugin');
+const notifier = require('node-notifier');<% if(extractingType === 'dll'){ %>
+const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');<% } %><% if(stylelint){ %>
+const StyleLintPlugin = require('stylelint-webpack-plugin');<% } %>
 
 // 生产环境才可以配置是否抽取css
 const extraction = utils.isBuild && config.build.extraction;
 
-let webpackCconfig = {
+let webpackCconfig = {<% if(type === false){ %>
   entry: utils.initMain(
     utils.getFiles(config.entry),
     utils.isBuild
-  ),
+  ),<% } %><% if(type){ %>
+  entry: {
+    app: utils.resolve(config.entry)
+  },<% } %>
   output: {
     path: utils.resolve(config.build.outputPath),
     publicPath: config[process.env.mode].publicPath
   },
-  resolve,
+  resolve: {
+    extensions: ['.js', '.vue', '.json'],
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js',
+      'components': utils.resolve('src/components')
+    }
+  },
   module: {
     rules: [
       // css loader
-      ...utils.cssLoader(extraction),
+      ...utils.cssLoader(extraction),<% if(eslint){ %>
       {
         test: /\.(js|vue)$/,
         loader: 'eslint-loader',
@@ -41,7 +49,7 @@ let webpackCconfig = {
         options: {
           formatter: require('eslint-friendly-formatter')
         }
-      },
+      },<% } %>
       {
         test: /\.vue$/,
         loader: 'vue-loader',
@@ -87,8 +95,8 @@ let webpackCconfig = {
       }
     ]
   },
-  plugins: [
-    ...utils.initView(utils.getFiles(config.views)),
+  plugins: [<% if(type === false){ %>
+    ...utils.initView(utils.getFiles(config.view)),<% } %>
     new ProgressBar(),
     new NotifierPlugin({
       onErrors (severity, errors) {
@@ -100,33 +108,30 @@ let webpackCconfig = {
           subtitle: error.file || ''
         });
       }
-    }),
+    }),<% if(stylelint){ %>
     new StyleLintPlugin({
       files: ['src/**/*.css', 'src/**/*.scss', 'src/**/*.sass', 'src/**/*.less']
-    })
+    })<% } %>
   ]
 };
-
-// 判断是否dll
-if (config.dll.list.length) {
-  let dir = utils.resolve(`../src/${config[process.env.mode].assetsDir}/${config.dll.manifestName}`).replace(/\\/g, '\/');
-  const libDir = dir.slice(0, dir.lastIndexOf('/') + 1);
-  const outputPath = dir.slice(dir.indexOf(`/${config[process.env.mode].assetsDir}/`), dir.lastIndexOf('/'));
-
-  webpackCconfig.plugins = webpackCconfig.plugins.concat([
-    new webpack.DllReferencePlugin({
-      context: __dirname,
-      manifest: require(utils.resolve(dir))
-    }),
-    new AddAssetHtmlPlugin([
-      {
-        filepath: utils.resolve(libDir + require(dir).fileName),
-        outputPath: outputPath,
-        publicPath: outputPath,
-        includeSourcemap: false
-      }
-    ])
-  ]);
-}
-
+<% if(extractingType === 'dll'){ %>
+// dll
+let dir = utils.resolve(`../src/${config[process.env.mode].assetsDir}/${config.dll.manifestName}`).replace(/\\/g, '\/');
+const libDir = dir.slice(0, dir.lastIndexOf('/') + 1);
+const outputPath = dir.slice(dir.indexOf(`/${config[process.env.mode].assetsDir}/`), dir.lastIndexOf('/'));
+webpackCconfig.plugins = webpackCconfig.plugins.concat([
+  new webpack.DllReferencePlugin({
+    context: __dirname,
+    manifest: require(utils.resolve(dir))
+  }),
+  new AddAssetHtmlPlugin([
+    {
+      filepath: utils.resolve(libDir + require(dir).fileName),
+      outputPath: outputPath,
+      publicPath: outputPath,
+      includeSourcemap: false
+    }
+  ])
+]);
+<% } %>
 module.exports = webpackCconfig;

@@ -6,10 +6,10 @@
  * @desc [工具函数]
 */
 const path = require('path');
-const os = require('os');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const glob = require('glob');
+const os = require('os');<% if(type === false){ %>
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const glob = require('glob');<% } %>
 const config = require('../config');
 
 let utils = {
@@ -56,18 +56,18 @@ let utils = {
         return ExtractTextPlugin.extract({
           use: loaderList,
           fallback: styleLoader
-        })
+        });
       }
       return [styleLoader].concat(loaderList);
     }
 
     return {
-      css: generationLoader(),
-      less: generationLoader('less'),
+      css: generationLoader()<% if(cssPretreatment === 'less'){ %>,
+      less: generationLoader('less')<% } %><% if(cssPretreatment === 'sass'){ %>,
       scss: generationLoader('sass'),
-      sass: generationLoader('sass'),
+      sass: generationLoader('sass')<% } %><% if(cssPretreatment === 'stylus'){ %>,
       stylus: generationLoader('stylus'),
-      styl: generationLoader('stylus')
+      styl: generationLoader('stylus')<% } %>
     };
   },
   cssLoader (extraction) {
@@ -84,7 +84,7 @@ let utils = {
   assetsPath (filePath) {
     let rootDir = config[process.env.mode].assetsDir;
     return path.join(rootDir, filePath);
-  },
+  }<% if(type === false){ %>,
   // 获取文件
   getFiles (_path) {
     let entries = {}, baseName;
@@ -125,7 +125,7 @@ let utils = {
       entry[key] = state ? main[key] : ['./build/reload'].concat(main[key]);
     });
     return entry;
-  }
+  }<% } %>
 };
 
 module.exports = utils;

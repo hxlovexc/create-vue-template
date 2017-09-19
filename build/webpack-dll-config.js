@@ -11,6 +11,7 @@ const merge = require('webpack-merge');
 const fs = require('fs');
 const config = require('../config/');
 const utils = require('./utils');
+const webpackBaseConfig = require('./webpack-base-config');
 const mode = process.env.mode === 'build';
 const manifestName = config.dll.manifestName;
 // lib路径
@@ -35,6 +36,7 @@ let webpackConfig = {
     library: '[name]'
   },
   devtool: config.dev.sourceType,
+  resolve: webpackBaseConfig.resolve,
   module: {
     rules: [
       {
@@ -79,7 +81,7 @@ webpackConfig.entry.lib.map((item) => {
 // 打包公用库
 webpack(webpackConfig, (error, stats) => {
   if (error) dllError('编译失败');
-  setName(Object.keys(stats.compilation.assets)[0])
+  setName(Object.keys(stats.compilation.assets)[0]);
   process.stdout.write(stats.toString({
     colors: true,
     modules: false,

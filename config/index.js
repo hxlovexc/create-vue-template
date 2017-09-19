@@ -6,26 +6,25 @@
  * @desc [配置文件]
 */
 
-module.exports = {
-  // // js入口
-  // entry: './src/index.js',
-  // // html入口
-  // view: './src/index.html',
+module.exports = {<% if(type) { %>
+  // js入口
+  entry: './src/main.js',
+  // html入口
+  view: './src/index.html',<% } else { %>
   // js入口
   entry: '../src/views/**/*.js',
   // html入口
-  views: '../src/views/**/*.html',
-  dll: {
+  view: '../src/views/**/*.html',<% } %>
+  <% if(extractingType === 'dll') { %>dll: {
     manifestName: '/lib/manifest.json',
     // list
     list: [
-      'vue',
-      'vue-router',
-      'vuex'
+      'vue',<% if(router){ %>
+      'vue-router'<% } %>
     ],
-    // 开发模式下才打包的dll
+    // 生产模式下才打包的依赖
     producedDll: []
-  },
+  },<% } %>
   dev: {
     port: 8080,
     publicPath: '/',

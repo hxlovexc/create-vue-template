@@ -8,10 +8,12 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const baseConfig = require('./webpack-base-config');
 const config = require('../config');
 const utils = require('./utils');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');<% if(type){ %>
+const templatePath = utils.resolve(config.view);<% } %>
 
 const buildConfig = {
   output: {
@@ -23,7 +25,35 @@ const buildConfig = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
     }),
-    new webpack.optimize.ModuleConcatenationPlugin()
+    new webpack.optimize.ModuleConcatenationPlugin()<% if(type){ %>,
+    new HtmlWebpackPlugin({
+      filename: path.basename(templatePath),
+      template: templatePath,
+      inject: true,
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      }
+    }),<% } %><% if(extractingType !== 'dll') { %>
+    // 将依赖的公用模块打包
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: function (module, count) {
+        return (
+          module.resource &&
+          /\.js$/.test(module.resource) &&
+          module.resource.indexOf(
+            path.join(__dirname, '../node_modules')
+          ) === 0
+        );
+      }
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest',
+      chunks: ['vendor']
+    }),
+    new webpack.HashedModuleIdsPlugin()<% } %>
   ]
 };
 
@@ -31,28 +61,6 @@ config.build.extraction && buildConfig.plugins.push(
   new ExtractTextPlugin({
     filename: utils.assetsPath('css/[name].[contenthash].css')
   })
-);
-
-// CommonsChunkPlugin
-config.dll.list.length && buildConfig.plugins.push(
-  // 将依赖的公用模块打包
-  new webpack.optimize.CommonsChunkPlugin({
-    name: 'vendor',
-    minChunks: function (module, count) {
-      return (
-        module.resource &&
-        /\.js$/.test(module.resource) &&
-        module.resource.indexOf(
-          path.join(__dirname, '../node_modules')
-        ) === 0
-      );
-    }
-  }),
-  new webpack.optimize.CommonsChunkPlugin({
-    name: 'manifest',
-    chunks: ['vendor']
-  }),
-  new webpack.HashedModuleIdsPlugin()
 );
 
 module.exports = merge(baseConfig, buildConfig);
