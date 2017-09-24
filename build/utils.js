@@ -94,15 +94,27 @@ let utils = {
     });
     return entries;
   },
+  getFilePath: (() => {
+    const viewPath = config.view;
+    const baseDir = viewPath.slice(viewPath.indexOf('/src/'), viewPath.indexOf('**/'));
+    return (filename) => {
+      filename = filename.replace(/\\/g, '/');
+      return filename = filename.slice(filename.indexOf(baseDir) + baseDir.length, filename.length);
+    };
+  })(),
+  getName (filePath) {
+    const mianName = this.getFilePath(filePath);
+    return mianName.slice(0, mianName.lastIndexOf('.'));
+  },
   // 多页html
   initView (views, state) {
     return Object.keys(views).map((key) => {
       let options = {
-        filename: key + '.html',
+        filename: this.getFilePath(views[key]),
         template: views[key],
         inject: true,
         chunksSortMode: 'dependency',
-        chunks: ['manifest', 'vendor', key]
+        chunks: ['manifest', 'vendor', this.getName(views[key])]
       };
       if (state) {
         options.chunksSortMode = 'dependency';
@@ -122,7 +134,7 @@ let utils = {
   initMain (main, state) {
     let entry = {};
     Object.keys(main).forEach((key) => {
-      entry[key] = state ? main[key] : ['./build/reload'].concat(main[key]);
+      entry[this.getName(main[key])] = state ? main[key] : ['./build/reload'].concat(main[key]);
     });
     return entry;
   }<% } %>

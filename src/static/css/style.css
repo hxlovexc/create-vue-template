@@ -1,0 +1,18 @@
+.hello {
+  padding: 200px 0;
+}
+
+.logo {
+  text-align: center;
+}
+
+.logo img {
+  width: 350px;
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 30px;
+  color: #555;
+}

@@ -35,7 +35,7 @@ const buildConfig = {
         collapseWhitespace: true,
         removeAttributeQuotes: true
       }
-    }),<% } %><% if(extractingType !== 'dll') { %>
+    })<% } %><% if(extractingType !== 'dll') { %>,
     // 将依赖的公用模块打包
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',

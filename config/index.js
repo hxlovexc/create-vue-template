@@ -14,8 +14,8 @@ module.exports = {<% if(type) { %>
   // js入口
   entry: '../src/views/**/*.js',
   // html入口
-  view: '../src/views/**/*.html',<% } %>
-  <% if(extractingType === 'dll') { %>dll: {
+  view: '../src/views/**/*.html',<% } %><% if(extractingType === 'dll') { %>
+  dll: {
     manifestName: '/lib/manifest.json',
     // list
     list: [

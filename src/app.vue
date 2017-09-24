@@ -1,10 +1,10 @@
 <template>
-  <div>
-    <router-view></router-view>
-    <hello></hello>
+  <div><% if(router){ %>
+    <router-view></router-view><% }else{ %>
+    <hello></hello><% } %>
   </div>
 </template>
-
+<% if(!router){ %>
 <script>
   import hello from 'components/hello';
   export default {
@@ -13,4 +13,4 @@
     }
   };
 </script>
-
+<% } %>

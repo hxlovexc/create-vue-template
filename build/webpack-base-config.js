@@ -34,6 +34,8 @@ let webpackCconfig = {<% if(type === false){ %>
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
+      'static': utils.resolve('src/static'),<% if(router){ %>
+      'views': utils.resolve('src/views'),<% } %>
       'components': utils.resolve('src/components')
     }
   },

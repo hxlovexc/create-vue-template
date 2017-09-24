@@ -17,7 +17,8 @@
   "devDependencies": {
     "add-asset-html-webpack-plugin": "^2.1.2",
     "autoprefixer": "^7.1.4",
-    "babel-core": "^6.26.0",<% if(eslint){ %>"babel-eslint": "^8.0.0",<% } %>
+    "babel-core": "^6.26.0",
+    <% if(eslint){ %>"babel-eslint": "^8.0.0",<% } %>
     "babel-helper-vue-jsx-merge-props": "^2.0.2",
     "babel-loader": "^7.1.2",
     "babel-plugin-syntax-jsx": "^6.18.0",
@@ -74,7 +75,7 @@
     "webpack-merge": "^4.1.0"
   },
   "dependencies": {
-    "vue": "^2.4.3"<% if(router){ %>,<% } %><% if(router){ %>
+    "vue": "^2.4.3"<% if(router){ %>,
     "vue-router": "^2.7.0"<% } %>
   },
   "browserslist": [
