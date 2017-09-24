@@ -30,15 +30,7 @@ let webpackCconfig = {<% if(type === false){ %>
     path: utils.resolve(config.build.outputPath),
     publicPath: config[process.env.mode].publicPath
   },
-  resolve: {
-    extensions: ['.js', '.vue', '.json'],
-    alias: {
-      'vue$': 'vue/dist/vue.esm.js',
-      'static': utils.resolve('src/static'),<% if(router){ %>
-      'views': utils.resolve('src/views'),<% } %>
-      'components': utils.resolve('src/components')
-    }
-  },
+  resolve: config.resolve,
   module: {
     rules: [
       // css loader

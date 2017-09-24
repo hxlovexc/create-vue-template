@@ -36,7 +36,7 @@ let webpackConfig = {
     library: '[name]'
   },
   devtool: config.dev.sourceType,
-  resolve: webpackBaseConfig.resolve,
+  resolve: config.resolve,
   module: {
     rules: [
       {

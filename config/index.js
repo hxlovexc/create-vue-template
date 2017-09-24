@@ -14,7 +14,16 @@ module.exports = {<% if(type) { %>
   // js入口
   entry: '../src/views/**/*.js',
   // html入口
-  view: '../src/views/**/*.html',<% } %><% if(extractingType === 'dll') { %>
+  view: '../src/views/**/*.html',<% } %>
+  resolve: {
+    extensions: ['.js', '.vue', '.json'],
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js',
+      'static': utils.resolve('src/static'),<% if(router){ %>
+      'views': utils.resolve('src/views'),<% } %>
+      'components': utils.resolve('src/components')
+    }
+  },<% if(extractingType === 'dll') { %>
   dll: {
     manifestName: '/lib/manifest.json',
     // list
