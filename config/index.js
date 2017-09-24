@@ -6,6 +6,8 @@
  * @desc [配置文件]
 */
 
+const utils = require('../build/utils');
+
 module.exports = {<% if(type) { %>
   // js入口
   entry: './src/main.js',
