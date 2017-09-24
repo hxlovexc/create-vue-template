@@ -81,6 +81,14 @@ let utils = {
     });
     return arr;
   },
+  // initResolve
+  initResolve (resolve) {
+    let alias = resolve.alias;
+    Object.keys(resolve.alias).forEach((key) => {
+      alias[key] = alias[key].indexOf('src') === 0 || alias[key].indexOf('.') === 0 ? this.resolve(alias[key]) : alias[key];
+    });
+    return resolve;
+  },
   assetsPath (filePath) {
     let rootDir = config[process.env.mode].assetsDir;
     return path.join(rootDir, filePath);
@@ -105,14 +113,6 @@ let utils = {
   getName (filePath) {
     const mianName = this.getFilePath(filePath);
     return mianName.slice(0, mianName.lastIndexOf('.'));
-  },
-  // initResolve
-  initResolve (resolve) {
-    let alias = resolve.alias;
-    Object.keys(resolve.alias).forEach((key) => {
-      alias[key] = alias[key].indexOf('src') === 0 || alias[key].indexOf('.') === 0 ? this.resolve(alias[key]) : alias[key];
-    });
-    return resolve;
   },
   // 多页html
   initView (views, state) {
