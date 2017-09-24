@@ -30,7 +30,7 @@ let webpackCconfig = {<% if(type === false){ %>
     path: utils.resolve(config.build.outputPath),
     publicPath: config[process.env.mode].publicPath
   },
-  resolve: config.resolve,
+  resolve: utils.initResolve(config.resolve),
   module: {
     rules: [
       // css loader

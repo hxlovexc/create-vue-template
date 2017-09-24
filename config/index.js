@@ -6,8 +6,6 @@
  * @desc [配置文件]
 */
 
-const utils = require('../build/utils');
-
 module.exports = {<% if(type) { %>
   // js入口
   entry: './src/main.js',
@@ -21,16 +19,16 @@ module.exports = {<% if(type) { %>
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      'static': utils.resolve('src/static'),<% if(router){ %>
-      'views': utils.resolve('src/views'),<% } %>
-      'components': utils.resolve('src/components')
+      'static': 'src/static',<% if(router){ %>
+      'views': 'src/views',<% } %>
+      'components': 'src/components'
     }
   },<% if(extractingType === 'dll') { %>
   dll: {
     manifestName: '/lib/manifest.json',
     // list
     list: [
-      'vue',<% if(router){ %>
+      'vue'<% if(router){ %>,
       'vue-router'<% } %>
     ],
     // 生产模式下才打包的依赖

@@ -11,7 +11,6 @@ const merge = require('webpack-merge');
 const fs = require('fs');
 const config = require('../config/');
 const utils = require('./utils');
-const webpackBaseConfig = require('./webpack-base-config');
 const mode = process.env.mode === 'build';
 const manifestName = config.dll.manifestName;
 // lib路径
@@ -36,7 +35,7 @@ let webpackConfig = {
     library: '[name]'
   },
   devtool: config.dev.sourceType,
-  resolve: config.resolve,
+  resolve: utils.initResolve(config.resolve),
   module: {
     rules: [
       {
