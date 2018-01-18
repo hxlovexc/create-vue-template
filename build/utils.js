@@ -91,7 +91,7 @@ let utils = {
   },
   assetsPath (filePath) {
     let rootDir = config[process.env.mode].assetsDir;
-    return path.join(rootDir, filePath);
+    return path.join(rootDir, filePath).replace(/\\/g, '/');
   }<% if(type === false){ %>,
   // 获取文件
   getFiles (_path) {
